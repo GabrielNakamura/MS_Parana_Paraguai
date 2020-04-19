@@ -16,6 +16,9 @@ env<- read.table(here::here("data", "amb.txt"), header= T)
 comm.presau<- ifelse(comm[,3:ncol(comm)]>=1,1,0) #incidence matrix
 rownames(comm.presau)<- comm[,"pontos"] #naming the rows with the names of streams
 
+###saving proccessed files####
+write.table(here::here("data", "processed", "comm.txt"))
+write.table(here::here("data", "processed", "env.txt"))
 
 #######Taxonomic beta diversity#######
 #between basins
@@ -46,6 +49,8 @@ points(scores.turn.taxonomic[1:10,1],scores.turn.taxonomic[1:10,2],pch=19,cex=1.
 points(scores.turn.taxonomic[11:20,1],scores.turn.taxonomic[11:20,2],pch=2,cex=1.8)
 text(scores.turn.taxonomic[,1],scores.turn.taxonomic[,2], labels=rownames(scores.turn.taxonomic))
 abline(v=0,h=0,lty=2)
+
+
 
 #plotting nestedness
 pcoa.nest.taxonomic<- cmdscale(sqrt(nest.taxonomic), eig = T)
@@ -171,6 +176,8 @@ adonis2(nest_phylogenetic_org~Turbidez + pH + Condutividade + O2.porc + Altitude
 
 adonis2(nest_phylogenetic_org~Turbidez + pH + Condutividade + O2.porc + Altitude + Temp + Profundidade + Velocidade + bacia, 
         data= env_std, permutations = 999, by = "margin")
+
+saveRDS(adonis_PhyloTotal, file = here::here("output", "adonis_PhyloTotal.rds")) #saving the results
 
 
 #testing taxonomic composition
