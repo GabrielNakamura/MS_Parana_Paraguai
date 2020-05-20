@@ -117,7 +117,11 @@ adonis_PhyloNest_std<- adonis2(nest_phylogenetic_org_std~Turbidez + pH + Conduti
 
 #testing taxonomic composition
 total_taxonomic_org_std<- as.matrix(as.dist(total.taxonomic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T)))),
-                                                                                         match(rownames(env_std), colnames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T))))]
+                                                                                 match(rownames(env_std), colnames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T))))]
+
+adonis_TaxTotal_std<- adonis2(total_taxonomic_org_std~Turbidez + pH + Condutividade + O2.porc + Altitude + Temp + Profundidade + Velocidade + bacia, 
+                             data= env_std, permutations = 999, by = "margin")
+
 
 turn_taxonomic_org_std<- as.matrix(as.dist(turn.taxonomic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(turn.taxonomic, diag = T, upper = T)))),
                                                                              match(rownames(env_std), colnames(as.matrix(as.dist(turn.taxonomic, diag = T, upper = T))))]
