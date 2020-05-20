@@ -48,11 +48,6 @@ points(scores.nest.taxonomic[11:20,1],scores.nest.taxonomic[11:20,2],pch=2,cex=1
 text(scores.nest.taxonomic[,1],scores.nest.taxonomic[,2], labels=rownames(scores.nest.taxonomic))
 abline(v=0,h=0,lty=2)
 
-permutest(betadisper(d = nest.taxonomic, group = comm$bacia, sqrt.dist = T))
-permutest(betadisper(d = total.taxonomic, group = comm$bacia, sqrt.dist = T))
-
-
-
 #######Phylogenetic beta diversity#######
 beta.phylogenetic<-phylo.beta.pair(comm.presau,tree = phylo,index.family="sorensen") #phylogenetic beta diversity
 total.phylogenetic<- beta.phylogenetic$phylo.beta.sor
@@ -92,7 +87,6 @@ points(scores.nest.phylogenetic[11:20,1],scores.nest.phylogenetic[11:20,2],pch=2
 text(scores.nest.phylogenetic[,1],scores.nest.phylogenetic[,2], labels=rownames(scores.nest.phylogenetic))
 abline(v=0,h=0,lty=2)
 
-
 ##################################
 #adonis with environmental factors
 #################################
@@ -100,31 +94,19 @@ env_std<- scale(x = env[, -10], center = T, scale = T)
 env_std<- data.frame(cbind(env_std, bacia= as.factor(env$Bacia)))
 
 #testing phylogenetic composition
-total_phylogenetic_org<- as.matrix(as.dist(total.phylogenetic, diag = T, upper = T))[match(rownames(env), rownames(as.matrix(as.dist(total.phylogenetic, diag = T, upper = T)))),
-                                                                                   match(rownames(env), colnames(as.matrix(as.dist(total.phylogenetic, diag = T, upper = T))))]
 total_phylogenetic_org_std<- as.matrix(as.dist(total.phylogenetic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(total.phylogenetic, diag = T, upper = T)))),
                                                                                      match(rownames(env_std), colnames(as.matrix(as.dist(total.phylogenetic, diag = T, upper = T))))]
 
 
-adonis_PhyloTotal<- adonis2(total_phylogenetic_org~Turbidez + pH + Condutividade + O2.porc + Altitude + Temp + Profundidade + Velocidade + Bacia, 
-                          data= env, permutations = 999, by = "margin")
-
 adonis_PhyloTotal_std<- adonis2(total_phylogenetic_org_std~Turbidez + pH + Condutividade + O2.porc + Altitude + Temp + Profundidade + Velocidade + bacia, 
                             data= env_std, permutations = 999, by = "margin")
 
-
-turn_phylogenetic_org<- as.matrix(as.dist(turn.phylogenetic, diag = T, upper = T))[match(rownames(env), rownames(as.matrix(as.dist(turn.phylogenetic, diag = T, upper = T)))),
-                                                                                   match(rownames(env), colnames(as.matrix(as.dist(turn.phylogenetic, diag = T, upper = T))))]
 turn_phylogenetic_org_std<- as.matrix(as.dist(turn.phylogenetic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(turn.phylogenetic, diag = T, upper = T)))),
                                                                                    match(rownames(env_std), colnames(as.matrix(as.dist(turn.phylogenetic, diag = T, upper = T))))]
-
 
 adonis_PhyloTurn_std<- adonis2(turn_phylogenetic_org_std~Turbidez + pH + Condutividade + O2.porc + Altitude + Temp + Profundidade + Velocidade + bacia, 
                       data= env_std, permutations = 999, by = "margin")
 
-
-nest_phylogenetic_org<- as.matrix(as.dist(nest.phylogenetic, diag = T, upper = T))[match(rownames(env), rownames(as.matrix(as.dist(nest.phylogenetic, diag = T, upper = T)))),
-                                                                                   match(rownames(env), colnames(as.matrix(as.dist(nest.phylogenetic, diag = T, upper = T))))]
 
 nest_phylogenetic_org_std<- as.matrix(as.dist(nest.phylogenetic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(nest.phylogenetic, diag = T, upper = T)))),
                                                                                    match(rownames(env_std), colnames(as.matrix(as.dist(nest.phylogenetic, diag = T, upper = T))))]
@@ -134,13 +116,8 @@ adonis_PhyloNest_std<- adonis2(nest_phylogenetic_org_std~Turbidez + pH + Conduti
 
 
 #testing taxonomic composition
-total_taxonomic_org<- as.matrix(as.dist(total.taxonomic, diag = T, upper = T))[match(rownames(env), rownames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T)))),
-                                                                                    match(rownames(env), colnames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T))))]
 total_taxonomic_org_std<- as.matrix(as.dist(total.taxonomic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T)))),
                                                                                          match(rownames(env_std), colnames(as.matrix(as.dist(total.taxonomic, diag = T, upper = T))))]
-
-adonis_TaxTotal_std<- adonis2(total_taxonomic_org_std~Turbidez + pH + Condutividade + O2.porc + Altitude + Temp + Profundidade + Velocidade + bacia, 
-        data= env_std, permutations = 999, by = "margin")
 
 turn_taxonomic_org_std<- as.matrix(as.dist(turn.taxonomic, diag = T, upper = T))[match(rownames(env_std), rownames(as.matrix(as.dist(turn.taxonomic, diag = T, upper = T)))),
                                                                              match(rownames(env_std), colnames(as.matrix(as.dist(turn.taxonomic, diag = T, upper = T))))]
